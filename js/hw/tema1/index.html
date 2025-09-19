@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <title>JS Тема 1</title>
+    <style>
+      .container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 10px;
+      }
+
+      .container > button {
+        padding: 10px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>JS Тема 1</h1>
+
+    <div class="container">
+      <button class="task-btn" onclick="task1()">
+        Завдання 1: Тризначне число
+      </button>
+      <button class="task-btn" onclick="task2()">
+        Завдання 2: Перевірка року
+      </button>
+      <button class="task-btn" onclick="task3()">
+        Завдання 3: Конвертер валют
+      </button>
+      <button class="task-btn" onclick="task4()">
+        Завдання 4: Міні-вікторина
+      </button>
+      <button class="task-btn" onclick="task5()">
+        Завдання 5: Наступний день
+      </button>
+      <button class="task-btn" onclick="task6()">Завдання 6: Зсув числа</button>
+      <button class="task-btn" onclick="task7()">Завдання 7: FizzBuzz</button>
+      <button class="task-btn" onclick="task9()">
+        Завдання 9: Вгадай число
+      </button>
+    </div>
+
+    <script>
+      function task1() {
+        let s = prompt("Введіть будь-яке тризначне число:");
+        if (!s) return;
+        s = s.trim();
+        if (!/^\d{3}$/.test(s)) {
+          alert("Потрібно саме три цифри (від 000 до 999)");
+          return;
+        }
+        const [a, b, c] = s.split("");
+        if (a === b || a === c || b === c) {
+          alert("Є повторювані цифри");
+        } else {
+          alert("Усі цифри різні");
+        }
+      }
+
+      function task2() {
+        const v = prompt("Введіть рік, наприклад 2024:");
+        if (!v) return;
+        const year = parseInt(v, 10);
+        if (Number.isNaN(year)) {
+          alert("Це не схоже на рік");
+          return;
+        }
+        const isLeap = year % 400 === 0 || (year % 4 === 0 && year % 100 !== 0);
+        alert(isLeap ? `${year} — високосний` : `${year} — звичайний рік`);
+      }
+
+      function task3() {
+        const usdStr = prompt("Скільки у вас доларів (USD)?");
+        if (!usdStr) return;
+        const usd = parseFloat(usdStr.replace(",", ""));
+        if (Number.isNaN(usd)) {
+          alert("Не можу розпізнати суму");
+          return;
+        }
+        const target = prompt("У що переводимо? EUR, UAH чи AZN?")
+          .trim()
+          .toUpperCase();
+        if (!["EUR", "UAH", "AZN"].includes(target)) {
+          alert("Можна лише: EUR, UAH або AZN");
+          return;
+        }
+        const rates = { EUR: 0.92, UAH: 40.0, AZN: 1.7 };
+        const result = usd * rates[target];
+        alert(`${usd} USD = ${result.toFixed(2)} ${target}`);
+      }
+
+      function task4() {
+        let score = 0;
+        const questions = [
+          {
+            q: "Столиця Франції?",
+            opts: ["A) Лондон", "B) Берлін", "C) Париж"],
+            ans: "C",
+          },
+          {
+            q: "Скільки днів у високосному році?",
+            opts: ["A) 365", "B) 366", "C) 360"],
+            ans: "B",
+          },
+          {
+            q: "Який елемент має символ O?",
+            opts: ["A) Кисень", "B) Натрій", "C) Залізо"],
+            ans: "A",
+          },
+        ];
+        for (const item of questions) {
+          const choice = prompt(
+            item.q + "\n" + item.opts.join("\n") + "\nВиберіть A, B або C:"
+          );
+          if (!choice) continue;
+          if (choice.trim().toUpperCase() === item.ans) score += 2;
+        }
+        alert(`Результат: ${score} з ${questions.length * 2} можливих`);
+      }
+
+      function task5() {
+        const dStr = prompt("Вкажіть день (1-31):");
+        if (!dStr) return;
+        const mStr = prompt("Вкажіть місяць (1-12):");
+        if (!mStr) return;
+        const yStr = prompt("Вкажіть рік:");
+        if (!yStr) return;
+        const d = parseInt(dStr, 10),
+          m = parseInt(mStr, 10),
+          y = parseInt(yStr, 10);
+        function isLeap(year) {
+          return year % 400 === 0 || (year % 4 === 0 && year % 100 !== 0);
+        }
+        const mdays = [
+          31,
+          isLeap(y) ? 29 : 28,
+          31,
+          30,
+          31,
+          30,
+          31,
+          31,
+          30,
+          31,
+          30,
+          31,
+        ];
+        if (m < 1 || m > 12 || d < 1 || d > mdays[m - 1]) {
+          alert("Такої дати не існує");
+          return;
+        }
+        let nd = d + 1,
+          nm = m,
+          ny = y;
+        if (nd > mdays[m - 1]) {
+          nd = 1;
+          nm = m + 1;
+          if (nm > 12) {
+            nm = 1;
+            ny = y + 1;
+          }
+        }
+        alert(`Наступний день: ${nd}.${nm}.${ny}`);
+      }
+
+      function task6() {
+        const s = prompt("Введіть число (наприклад 123456):");
+        if (!s) return;
+        const kStr = prompt("На скільки цифр зрушити?");
+        if (!kStr) return;
+        let k = parseInt(kStr, 10);
+        const neg = s.startsWith("-");
+        const core = neg ? s.slice(1) : s;
+        if (core.length === 0) {
+          alert("Це не число");
+          return;
+        }
+        k = k % core.length;
+        const rotated = core.slice(k) + core.slice(0, k);
+        alert(`Результат: ${neg ? "-" : ""}${rotated}`);
+      }
+
+      function task7() {
+        let out = "";
+        for (let i = 1; i <= 100; i++) {
+          if (i % 15 === 0) out += "FizzBuzz\n";
+          else if (i % 3 === 0) out += "Fizz\n";
+          else if (i % 5 === 0) out += "Buzz\n";
+          else out += i + "\n";
+        }
+        alert(out);
+      }
+
+      function task9() {
+        alert("Загадайте число від 0 до 100. Я буду пробувати його знайти");
+        let lo = 0,
+          hi = 100;
+        while (lo <= hi) {
+          const mid = Math.floor((lo + hi) / 2);
+          const resp = prompt(
+            `Ваше число більше ${mid}, менше ${mid}, чи дорівнює ${mid}? (>, <, =)`
+          );
+          if (!resp) {
+            alert("Гру перервано");
+            return;
+          }
+          if (resp === "=") {
+            alert(`Число знайдено: ${mid}`);
+            return;
+          } else if (resp === ">") lo = mid + 1;
+          else if (resp === "<") hi = mid - 1;
+          else alert("Вводьте тільки >, < або =");
+        }
+        alert("Відповіді суперечать одна одній");
+      }
+    </script>
+  </body>
+</html>
