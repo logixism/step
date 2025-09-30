@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Завдання 1-4</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      h2 {
+        margin-top: 30px;
+      }
+      .task {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Домашні завдання</h1>
+
+    <div class="task">
+      <h2>Завдання 1: Довжина окружності</h2>
+      <p>Радіус: 50</p>
+      <button onclick="calcCircle()">Обчислити</button>
+      <p id="circleResult"></p>
+    </div>
+
+    <div class="task">
+      <h2>Завдання 2: Максимальне число та кількість п’ятірок</h2>
+      <p>Масив: [1, 5, 7, 5, 3, 5, 9]</p>
+      <button onclick="analyzeArray()">Аналізувати</button>
+      <p id="arrayResult"></p>
+    </div>
+
+    <div class="task">
+      <h2>Завдання 3: Випадкове число</h2>
+      <input type="number" id="min" placeholder="Мін" />
+      <input type="number" id="max" placeholder="Макс" />
+      <button onclick="showRandom()">Згенерувати</button>
+      <p id="randomResult"></p>
+    </div>
+
+    <div class="task">
+      <h2>Завдання 4: Гра "Вгадай число"</h2>
+      <p>Я загадав число від 1 до 100. Спробуй вгадати!</p>
+      <input type="number" id="guessInput" placeholder="Введіть число" />
+      <button onclick="makeGuess()">Вгадати</button>
+      <p id="result"></p>
+      <p id="attempts"></p>
+    </div>
+
+    <script>
+      function calcCircle() {
+        const R = 50;
+        const L = 2 * Math.PI * R;
+        document.getElementById("circleResult").innerText =
+          "Довжина окружності: " + L.toFixed(2);
+      }
+
+      function analyzeArray() {
+        const arr = [1, 5, 7, 5, 3, 5, 9];
+        const max = Math.max(...arr);
+        const countFives = arr.filter((x) => x === 5).length;
+        document.getElementById("arrayResult").innerText =
+          "Максимальне число: " + max + ", кількість 5: " + countFives;
+      }
+
+      function randomInteger(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+      function showRandom() {
+        const min = Number(document.getElementById("min").value);
+        const max = Number(document.getElementById("max").value);
+        if (isNaN(min) || isNaN(max) || min > max) {
+          document.getElementById("randomResult").innerText =
+            "Введіть правильні числа";
+          return;
+        }
+        const rnd = randomInteger(min, max);
+        document.getElementById("randomResult").innerText =
+          "Випадкове число: " + rnd;
+      }
+
+      const secretNumber = Math.floor(Math.random() * 100) + 1;
+      let attempts = 0;
+
+      function makeGuess() {
+        const userGuess = Number(document.getElementById("guessInput").value);
+        attempts++;
+        if (userGuess === secretNumber) {
+          document.getElementById("result").innerText =
+            "Вітаю, ви вгадали число";
+          document.getElementById("attempts").innerText =
+            "Кількість спроб: " + attempts;
+        } else if (userGuess < secretNumber) {
+          document.getElementById("result").innerText = "Загадане число більше";
+        } else {
+          document.getElementById("result").innerText = "Загадане число менше";
+        }
+      }
+    </script>
+  </body>
+</html>
